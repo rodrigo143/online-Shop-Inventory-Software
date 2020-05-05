@@ -81,18 +81,27 @@
                     {
                         "data": null,
                         render: function (data) {
-                            if (data.status == 'Active') {
-                                return '<button type="button" class="btn btn-success btn-xs btn-status" data-status="Inactive" name="status" value="' + data.id + '">Active</button>';
-                            } else {
-                                return '<button type="button" class="btn btn-warning btn-xs btn-status" data-status="Active" name="status" value="' + data.id + '" >Inactive</button>';
+                            if(data.id === 1){
+                                return data.status;
+                            }else{
+                                if (data.status == 'Active') {
+                                    return '<button type="button" class="btn btn-success btn-xs btn-status" data-status="Inactive" name="status" value="' + data.id + '">Active</button>';
+                                } else {
+                                    return '<button type="button" class="btn btn-warning btn-xs btn-status" data-status="Active" name="status" value="' + data.id + '" >Inactive</button>';
+                                }
                             }
                         }
                     },
                     {
                         data: null,
                         render: function (data) {
-                            return '<button type="button" value="' + data.id + '" class="btn btn-edit btn-xs btn-info"> <i class="mdi mdi-square-edit-outline"></i></button>'
-                                + '<button type="button" value="' + data.id + '"class="btn btn-danger btn-delete btn-xs ml-2"  ><i class="mdi mdi-delete"></i></button>';
+                            if(data.id === 1){
+                                return '';
+                            }else{
+                                return '<button type="button" value="' + data.id + '" class="btn btn-edit btn-xs btn-info"> <i class="mdi mdi-square-edit-outline"></i></button>'
+                                    + '<button type="button" value="' + data.id + '"class="btn btn-danger btn-delete btn-xs ml-2"  ><i class="mdi mdi-delete"></i></button>';
+
+                            }
 
                         }
                     }

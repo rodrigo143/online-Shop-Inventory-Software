@@ -12,32 +12,19 @@ use Illuminate\Support\Facades\DB;
 
 class PurchaseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
+
     public function index()
     {
-        return view('admin.purchase.index');
+        $product = Product::all()->count();
+        if ($product>0){
+            return view('admin.purchase.index');
+
+        }else{
+            return redirect('admin/product');
+
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return false|string
-     */
     public function store(Request $request)
     {
         $this->validate($request, [
@@ -78,12 +65,6 @@ class PurchaseController extends Controller
         return json_encode($response);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         $purchase['data'] = DB::table('purchases')

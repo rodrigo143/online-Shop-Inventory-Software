@@ -99,18 +99,28 @@
                     {
                         "data": null,
                         render: function (data) {
-                            if (data.status == 'Active') {
-                                return '<button type="button" class="btn btn-success btn-xs btn-status" data-status="Inactive" name="status" value="' + data.id + '">Active</button>';
-                            } else {
-                                return '<button type="button" class="btn btn-warning btn-xs btn-status" data-status="Active" name="status" value="' + data.id + '" >Inactive</button>';
+                            if($('#user_id').val() == data.id ){
+                                return data.status;
+                            }else{
+                                if (data.status == 'Active') {
+                                    return '<button type="button" class="btn btn-success btn-xs btn-status" data-status="Inactive" name="status" value="' + data.id + '">Active</button>';
+                                } else {
+                                    return '<button type="button" class="btn btn-warning btn-xs btn-status" data-status="Active" name="status" value="' + data.id + '" >Inactive</button>';
+                                }
                             }
+
                         }
                     },
                     {
                         data: null,
                         render: function (data) {
-                            return "<a href='javascript:void(0);' data-id='" + data.id + "' class='action-icon btn-edit mr-2'> <i class='fas fa-edit'></i></a>" +
-                                "<a href='javascript:void(0);' data-id='" + data.id + "' class='action-icon btn-delete'> <i class='fas fa-trash-alt'></i></a>";
+                            if($('#user_id').val() == data.id ){
+                                return "<a href='javascript:void(0);' data-id='" + data.id + "' class='action-icon btn-edit mr-2'> <i class='fas fa-edit'></i></a>";
+                            }else{
+                                return "<a href='javascript:void(0);' data-id='" + data.id + "' class='action-icon btn-edit mr-2'> <i class='fas fa-edit'></i></a>" +
+                                    "<a href='javascript:void(0);' data-id='" + data.id + "' class='action-icon btn-delete'> <i class='fas fa-trash-alt'></i></a>";
+                            }
+
                         }
                     }
                 ],

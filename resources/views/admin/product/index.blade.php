@@ -98,7 +98,7 @@
                     {
                         data: null,
                         render: function (data) {
-                            return '<img src="{{asset('/product')}}/' + data.productImage + '" class="img-fluid avatar-lg rounded">';
+                             return '<img src="' + data.productImage +'" class="img-fluid avatar-lg rounded">';
                         }
                     },
                     {data: "productName"},
@@ -259,7 +259,7 @@
 
             });
 
-            $(document).on("change", "#productImage", function () {
+            $(document).on("change", "#productImage", function (e) {
 
                 e.preventDefault();
                 var fd = new FormData();

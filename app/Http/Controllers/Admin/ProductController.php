@@ -7,39 +7,27 @@ use App\Http\Controllers\Controller;
 use App\Order;
 use App\OrderProducts;
 use App\Product;
+use App\Purchase;
+use App\Stock;
 use App\Store;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
+
     public function index()
     {
-        return view('admin.product.index');
+        $store = Store::all()->count();
+         if($store>0){
+             return view('admin.product.index');
+        }else{
+            return redirect('admin/store');
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return false|string
-     */
     public function store(Request $request)
     {
         $this->validate($request, [
@@ -74,7 +62,16 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product['data'] = Product::latest()->get();
+        $products = Product::latest()->get();
+        $product['data'] = $products->map(function ($product) {
+            if (App::environment('local')) {
+                $product->productImage = url('/product/'.$product->productImage);
+            }else{
+                $product->productImage = url('/public/product/'.$product->productImage);
+            }
+
+            return $product;
+        });
         return $product;
     }
 
@@ -209,6 +206,23 @@ class ProductController extends Controller
                     $newProduct->productPrice = $syncProduct->price;
                     $newProduct->productImage = $imageName;
                     $newProduct->save();
+
+                    $stock =  Stock::query()->where('product_id','=',$newProduct->id)->first();
+                    if(!$stock){
+                        $latestStock = new Stock();
+                        $latestStock->product_id = $newProduct->id;
+                        $latestStock->purchase = 100;
+                        $latestStock->stock = 100;
+                        $latestStock->save();
+                    }
+                    $purchase = new Purchase();
+                    $purchase->date = date('yy-m-d');
+                    $purchase->invoiceID = date('yy-m-d');
+                    $purchase->product_id = $newProduct->id;
+                    $purchase->supplier_id = 1;
+                    $purchase->quantity = 100;
+                    $purchase->save();
+
                     $orderCount++;
                 }
             }
@@ -239,8 +253,4 @@ class ProductController extends Controller
         ));
         return curl_exec($curl);
     }
-
-
-
-
 }
