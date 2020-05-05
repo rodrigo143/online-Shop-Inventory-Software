@@ -255,8 +255,7 @@
                     {
                         data: null,
                         render: function (data) {
-                            return "<a href='javascript:void(0);' data-id='" + data.id + "' class='action-icon btn-edit mr-2'> <i class='fas fa-edit'></i></a>" +
-                                "<a href='javascript:void(0);' data-id='" + data.id + "' class='action-icon btn-delete'> <i class='fas fa-trash-alt'></i></a>";
+                            return "<a href='javascript:void(0);' data-id='" + data.id + "' class='action-icon btn-edit mr-2'> <i class='fas fa-edit'></i></a>";
                         }
                     }
                 ],

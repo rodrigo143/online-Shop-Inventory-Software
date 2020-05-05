@@ -226,8 +226,7 @@
                         data: null,
                         render: function (data) {
                             if(data.status != 'Paid' && data.status != 'Return' && data.status != 'Lost' ){
-                                return "<a href='javascript:void(0);' data-id='" + data.id + "' class='action-icon btn-edit mr-2'> <i class='fas fa-edit'></i></a>" +
-                                    "<a href='javascript:void(0);' data-id='" + data.id + "' class='action-icon btn-delete'> <i class='fas fa-trash-alt'></i></a>";
+                                return "<a href='javascript:void(0);' data-id='" + data.id + "' class='action-icon btn-edit mr-2'> <i class='fas fa-edit'></i></a>";
                             }else{
                                 return 'Access Denied';
                             }

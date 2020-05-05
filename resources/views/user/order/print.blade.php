@@ -68,160 +68,89 @@
     </style>
 </head>
 <body>
-<div class="section">
+<?php
+use Illuminate\Support\Facades\DB;
+$orderIDs = unserialize($invoice->order_id); ?>
 
-    <div class="div-section">
-        <table class="table-with-info" border="0" cellspacing="0" cellpadding="0">
-            <tr>
-                <td style="width: 50%;top: 0;display: block;">
-                    <p>invoice #2203B415</p>
 
-                    <strong>Rajib <br>
-                        01916504602<br>
-                        H-49-51, Krishi Vaban, Dilkusa C/A, Dhaka-1000</strong>
-                </td>
-                <td style="width: 50%">
-                    Order Date : 2020-03-22<br>
-                    Dorkarishop.com <br>
-                    375/1, 60 Feet Road<br>
-                    Mirpur-2 Dhaka<br>
-                    Contact No : 017918732244
-                </td>
-            </tr>
-        </table>
-        <table class="table table-striped">
+<?php $count = 1; foreach ($orderIDs as $orderID) {
 
-            <tr>
-                <th style="width: 60%">Product</th>
-                <th style="width: 20%">Quantity</th>
-                <th style="width: 20%">Price</th>
-            </tr>
 
-            <tr>
-                <td>digital blood pressure monitor-0084</td>
-                <td>1</td>
-                <td>1590</td>
-            </tr>
-            <tfoot>
-            <tr>
-                <td colspan="1" style="border: none;"></td>
-                <th>Delivery : </th>
-                <td> Tk</td>
-            </tr>
-            <tr>
-                <td colspan="1" style="border: none;"></td>
-                <th>Total : </th>
-                <td>1690 Tk</td>
-            </tr>
+$order  = DB::table('orders')
+    ->select('orders.*', 'customers.customerName', 'customers.customerPhone', 'customers.customerAddress', 'couriers.courierName', 'cities.cityName', 'zones.zoneName', 'users.name', 'stores.*', 'payment_types.paymentTypeName', 'payments.paymentNumber')
+    ->leftJoin('customers', 'orders.id', '=', 'customers.order_id')
+    ->leftJoin('couriers', 'orders.courier_id', '=', 'couriers.id')
+    ->leftJoin('payment_types', 'orders.payment_type_id', '=', 'payment_types.id')
+    ->leftJoin('payments', 'orders.payment_id', '=', 'payments.id')
+    ->leftJoin('cities', 'orders.city_id', '=', 'cities.id')
+    ->leftJoin('zones', 'orders.zone_id', '=', 'zones.id')
+    ->leftJoin('users', 'orders.user_id', '=', 'users.id')
+    ->leftJoin('stores', 'orders.store_id', '=', 'stores.id')
+    ->where('orders.id', '=', $orderID)->get()->first();
+if($count == 1) {
+    echo '<div class="section">';
+    $last = true;
+}
+?>
+<div class="div-section">
+    <table class="table-with-info" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td style="width: 50%;top: 0;display: block;">
+                <p>invoice #{{ $order->invoiceID }}</p>
 
-        </table>
-        <div style=" display: flex; flex-direction: row; justify-content: space-between; ">
-            <p>NB:  This invoice will be used as a Warranty Card from purchase date (2020-03-22). </p>
-            <p>Order Recived By : </p>
-        </div>
+                <strong>{{ $order->customerName }} <br>
+                    {{ $order->customerPhone }}<br>
+                    {{ $order->customerAddress }}</strong>
+            </td>
+            <td style="width: 50%">
+                Order Date : {{ $order->orderDate }}<br>
+                <?php echo $order->storeDetails; ?>
+            </td>
+        </tr>
+    </table>
+    <table class="table table-striped">
+
+        <tr>
+            <th style="width: 60%">Product</th>
+            <th style="width: 20%">Quantity</th>
+            <th style="width: 20%">Price</th>
+        </tr>
+        <?php
+        $products = DB::table('order_products')->where('order_id', '=', $order->id)->get();
+        foreach ($products as $product) { ?>
+        <tr>
+            <td>{{$product->productName}}</td>
+            <td>{{$product->quantity}}</td>
+            <td>{{$product->productPrice}}</td>
+        </tr>
+        <?php } ?>
+        <tfoot>
+        <tr>
+            <td colspan="1" style="border: none;"></td>
+            <th>Delivery : {{$order->deliveryCharge}} </th>
+            <td> Tk</td>
+        </tr>
+        <tr>
+            <td colspan="1" style="border: none;"></td>
+            <th>Total : </th>
+            <td>{{$order->subTotal}} Tk</td>
+        </tr>
+
+    </table>
+    <div style=" display: flex; flex-direction: row; justify-content: space-between; ">
+        <p>NB:  This invoice will be used as a Warranty Card from purchase date ({{ date('yy-m-d') }}). </p>
+        <p>Order Recived By : {{ $order->name }}</p>
     </div>
-    <hr>
-    <div class="div-section">
-        <table class="table-with-info" border="0" cellspacing="0" cellpadding="0">
-            <tr>
-                <td style="width: 50%;top: 0;display: block;">
-                    <p>invoice #22037286</p>
-
-                    <strong>Mamunur Rashid <br>
-                        01711106539<br>
-                        Mirpur -2 CommerceCollegeroad , H-3, Avenue-3, Block-C , Dhaka</strong>
-                </td>
-                <td style="width: 50%">
-                    Order Date : 2020-05-02<br>
-                    Dorkarishop.com <br>
-                    375/1, 60 Feet Road<br>
-                    Mirpur-2 Dhaka<br>
-                    Contact No : 017918732244
-                </td>
-            </tr>
-        </table>
-        <table class="table table-striped">
-
-            <tr>
-                <th style="width: 60%">Product</th>
-                <th style="width: 20%">Quantity</th>
-                <th style="width: 20%">Price</th>
-            </tr>
-
-            <tr>
-                <td>digital blood pressure monitor-0084</td>
-                <td>1</td>
-                <td>1590</td>
-            </tr>
-            <tfoot>
-            <tr>
-                <td colspan="1" style="border: none;"></td>
-                <th>Delivery : </th>
-                <td> Tk</td>
-            </tr>
-            <tr>
-                <td colspan="1" style="border: none;"></td>
-                <th>Total : </th>
-                <td>1690 Tk</td>
-            </tr>
-
-        </table>
-        <div style=" display: flex; flex-direction: row; justify-content: space-between; ">
-            <p>NB:  This invoice will be used as a Warranty Card from purchase date (2020-05-02). </p>
-            <p>Order Recived By : </p>
-        </div>
-    </div>
-    <hr>
-    <div class="div-section">
-        <table class="table-with-info" border="0" cellspacing="0" cellpadding="0">
-            <tr>
-                <td style="width: 50%;top: 0;display: block;">
-                    <p>invoice #2203C904</p>
-
-                    <strong>শিলুফাবেগম <br>
-                        01711484558<br>
-                        হাসান হাউজ। গুহ রোড। শ্রীমংগল, যে কুরিয়ারে দেওয়া</strong>
-                </td>
-                <td style="width: 50%">
-                    Order Date : 2020-05-02<br>
-                    Dorkarishop.com <br>
-                    375/1, 60 Feet Road<br>
-                    Mirpur-2 Dhaka<br>
-                    Contact No : 017918732244
-                </td>
-            </tr>
-        </table>
-        <table class="table table-striped">
-
-            <tr>
-                <th style="width: 60%">Product</th>
-                <th style="width: 20%">Quantity</th>
-                <th style="width: 20%">Price</th>
-            </tr>
-
-            <tr>
-                <td>A Foot Massager-ডায়াবেটিস নিয়ন্ত্রণ করার যন্ত্র</td>
-                <td>1</td>
-                <td>1690</td>
-            </tr>
-            <tfoot>
-            <tr>
-                <td colspan="1" style="border: none;"></td>
-                <th>Delivery : </th>
-                <td> Tk</td>
-            </tr>
-            <tr>
-                <td colspan="1" style="border: none;"></td>
-                <th>Total : </th>
-                <td>1790 Tk</td>
-            </tr>
-
-        </table>
-        <div style=" display: flex; flex-direction: row; justify-content: space-between; ">
-            <p>NB:  This invoice will be used as a Warranty Card from purchase date (2020-05-02). </p>
-            <p>Order Recived By : </p>
-        </div>
-    </div>
+</div>
+<hr>
+<?php
+if($count == 3 ) {
+    echo '</div>';
+    $count = 1;
+}else{
+    $count++;
+}
+} ?>
 </div>
 
 <script src="{{asset('js/jquery.min.js')}}"></script>
@@ -229,7 +158,6 @@
 <script>
     $(function() {
         window.print();
-
         window.onfocus = function() {
             window.close();
         }

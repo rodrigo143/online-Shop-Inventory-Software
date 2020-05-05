@@ -624,16 +624,16 @@ class OrderController extends Controller
         $ids = $request['ids'];
         if($ids){
             foreach ($ids as $id){
-                Order::query()->truncate();
-                Customer::query()->truncate();
-                OrderProducts::query()->truncate();
-                Notification::query()->truncate();
-//                $result = Order::find($id)->delete();
-//                if($result){
-//                    Customer::query()->where('order_id','=',$id)->delete();
-//                    OrderProducts::query()->where('order_id','=',$id)->delete();
-//                    Notification::query()->where('order_id','=',$id)->delete();
-//                }
+//                Order::query()->truncate();
+//                Customer::query()->truncate();
+//                OrderProducts::query()->truncate();
+//                Notification::query()->truncate();
+                $result = Order::find($id)->delete();
+                if($result){
+                    Customer::query()->where('order_id','=',$id)->delete();
+                    OrderProducts::query()->where('order_id','=',$id)->delete();
+                    Notification::query()->where('order_id','=',$id)->delete();
+                }
             }
             $response['status'] = 'success';
             $response['message'] = 'Successfully Delete Order';

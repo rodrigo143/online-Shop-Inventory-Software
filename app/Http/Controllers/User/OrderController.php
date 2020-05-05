@@ -216,22 +216,6 @@ class OrderController extends Controller
         return json_encode($response);
     }
 
-    // Delete Single Order
-    public function destroy($id)
-    {
-        $result = Order::find($id)->delete();
-        if($result){
-            Customer::query()->where('order_id','=',$id)->delete();
-            OrderProducts::query()->where('order_id','=',$id)->delete();
-            $response['status'] = 'success';
-            $response['message'] = 'Successfully Delete Order';
-        }else{
-            $response['status'] = 'failed';
-            $response['message'] = 'Unsuccessful to Delete Order';
-        }
-        return json_encode($response);
-    }
-
     // Show Order By status
     public function ordersByStatus($status)
     {
@@ -513,12 +497,6 @@ class OrderController extends Controller
         return $response;
     }
 
-    //
-    public function view(Request $request)
-    {
-
-    }
-
     // Create Invoice ID
     public function uniqueID()
     {
@@ -626,57 +604,6 @@ class OrderController extends Controller
         return curl_exec($curl);
     }
 
-    // Delete All Orders
-    public function deleteAll(Request $request)
-    {
-        $ids = $request['ids'];
-        if($ids){
-            foreach ($ids as $id){
-                Order::query()->truncate();
-                Customer::query()->truncate();
-                OrderProducts::query()->truncate();
-                Notification::query()->truncate();
-//                $result = Order::find($id)->delete();
-//                if($result){
-//                    Customer::query()->where('order_id','=',$id)->delete();
-//                    OrderProducts::query()->where('order_id','=',$id)->delete();
-//                    Notification::query()->where('order_id','=',$id)->delete();
-//                }
-            }
-            $response['status'] = 'success';
-            $response['message'] = 'Successfully Delete Order';
-        }else{
-            $response['status'] = 'failed';
-            $response['message'] = 'Unsuccessful to Delete Order';
-        }
-        return json_encode($response);
-     }
-
-    // Assign Order to a user
-    public function assign(Request $request)
-    {
-        $user_id = $request['user_id'];
-        $ids = $request['ids'];
-        if($ids){
-            foreach ($ids as $id){
-                $order = Order::find($id);
-                $order->user_id = $user_id;
-                $order->save();
-                $notification = new Notification();
-                $user = User::find($user_id);
-                $notification->order_id = $id;
-                $notification->notificaton = 'Successfully Assign Order to '. $user->name;
-                $notification->user_id =  Auth::id();
-                $notification->save();
-            }
-            $response['status'] = 'success';
-            $response['message'] = 'Successfully Assign User to this Order';
-        }else{
-            $response['status'] = 'failed';
-            $response['message'] = 'Unsuccessful to Assign User to this Order';
-        }
-        return json_encode($response);
-    }
 
     // Change Single order Status
     public function status(Request $request)

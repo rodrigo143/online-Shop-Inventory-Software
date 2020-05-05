@@ -35,6 +35,12 @@
                         <li>
                             <a href="{{url('admin/supplier ')}}" class="{{ (request()->is('admin/supplier')) ? 'active' : '' }}">Supplier</a>
                         </li>
+                        <li>
+                            <a href="{{url('admin/payment ')}}" class="{{ (request()->is('admin/payment')) ? 'active' : '' }}">Payment</a>
+                        </li>
+                        <li>
+                            <a href="{{url('admin/payment/type ')}}" class="{{ (request()->is('admin/payment/type')) ? 'active' : '' }}">Payment Method</a>
+                        </li>
                     </ul>
                 </li>
                 <li>
